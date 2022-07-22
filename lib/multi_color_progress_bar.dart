@@ -8,6 +8,8 @@ class MultiColorProgressBar extends StatelessWidget {
   final Color emptyColor;
   final double edgeBorderRadius;
   final double insideBorderRadius;
+  final double height;
+  final double progressGap;
 
   const MultiColorProgressBar(
       this.progressSegments,
@@ -17,6 +19,8 @@ class MultiColorProgressBar extends StatelessWidget {
         this.edgeBorderRadius = 3.0,
         this.insideBorderRadius = 1.0,
         this.emptyColor = const Color.fromRGBO(234, 236, 240, 1),
+        this.height = 4.0,
+        this.progressGap = 1.0,
       })
       : super(key: key);
 
@@ -31,7 +35,7 @@ class MultiColorProgressBar extends StatelessWidget {
       Flexible firstSegment = Flexible(
           flex: progressSegments.first.value,
           child: Container(
-            margin: const EdgeInsets.only(right: 1.0),
+            margin: EdgeInsets.only(right: progressGap),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(edgeBorderRadius),
@@ -45,7 +49,7 @@ class MultiColorProgressBar extends StatelessWidget {
     Flexible lastSegment = Flexible(
         flex: totalProgress - _totalProgressCompleted,
         child: Container(
-          margin: const EdgeInsets.only(right: 1.0),
+          margin: EdgeInsets.only(right: progressGap),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(_emptyEdgeBorderRadius),
@@ -56,14 +60,14 @@ class MultiColorProgressBar extends StatelessWidget {
         ));
 
     if (progressSegments.length > 1) {
-      List<ProgressSegment> middleSegments = progressSegments.sublist(0);
+      List<ProgressSegment> middleSegments = progressSegments.sublist(1);
       for (var segment in middleSegments) {
         Flexible progressSegmentWidget = Flexible(
             flex: segment.value,
             child: Container(
-              margin: const EdgeInsets.only(right: 1.0),
+              margin: EdgeInsets.only(right: progressGap),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(1.0),
+                  borderRadius: BorderRadius.circular(insideBorderRadius),
                   color: segment.color),
             ));
         segments.add(progressSegmentWidget);
@@ -77,7 +81,7 @@ class MultiColorProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return SizedBox(
-      height: 4,
+      height: height,
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: progressParts()
